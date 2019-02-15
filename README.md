@@ -77,11 +77,37 @@ Please see the following video for a quick demo.
 
 After starting the container, you'll see the setup page of Magento 2. You can use the script `install-magento` to quickly install Magento 2. The installation script uses the variables in the `env` file.
 
+### AddressFinder
+
+There are two ways you could install AddressFinder, either via source (so you can interact with the codebase and make changes/PRs) or through the zip distribution instead.
+
+#### Source
+
+~~~
+$ docker exec -it <container_name> apt-get update && apt-get install -y git
+$ docker exec -it -u www-data <container_name> composer require addressfinder/module-magento2 --prefer-source
+~~~
+
+#### Distribution
+
+~~~
+$ docker exec -it -u www-data <container_name> composer require addressfinder/module-magento2
+~~~
+
+AddressFinder will be accessible via a locally mounted volume at `./volumes/magento/vendor/addressfinder/module-magento2`.
+
 ### Magento 2
 
 ~~~
 $ docker exec -it <container_name> install-magento
 ~~~
+
+> Note, if your project name is quite long, you might see an error about the MySQL server crashing. What you're likely experiencing is [this issue](https://github.com/docker-library/mysql/issues/243). It's related to [this MySQL bug](https://bugs.mysql.com/bug.php?id=82596) and the fix [is here](https://github.com/OscarBarrett/mysql-docker-buffer-overflow-example#to-make-it-work). In short, you'll need to recreate your instances using a shorter project name.
+
+```
+$ docker-compose --project-name afm2 up -d
+$ docker exec -it <container_name> install-magento
+```
 
 ### Sample data
 

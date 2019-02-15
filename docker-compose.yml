@@ -3,15 +3,19 @@ services:
   web:
     image: alexcheng/magento2
     ports:
-      - "80:80"
+      - "8080:80"
+    volumes:
+      - ./volumes/magento/vendor/addressfinder:/var/www/html/vendor/addressfinder
     links:
       - db
     env_file:
       - env
   db:
     image: mysql:5.6.23
+    ports:
+      - "33060:3306"
     volumes:
-      - db-data:/var/lib/mysql/data
+      - ./volumes/mysql:/var/lib/mysql
     env_file:
       - env
   phpmyadmin:
@@ -19,6 +23,4 @@ services:
     ports:
       - "8580:80"
     links:
-      - db     
-volumes:
-  db-data: 
+      - db
